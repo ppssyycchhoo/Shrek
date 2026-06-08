@@ -998,7 +998,6 @@ function Library:UpdateColorsUsingRegistry()
     for Instance, Properties in Library.Registry do
         for Property, Index in Properties do
             local SchemeValue = GetSchemeValue(Index)
-
             if SchemeValue or typeof(Index) == "function" then
                 Instance[Property] = SchemeValue or Index()
             end
@@ -3998,7 +3997,6 @@ do
         table.insert(Groupbox.Elements, Toggle)
 
         Toggle.Default = Toggle.Value
-
         Toggles[Idx] = Toggle
 
         return Toggle
@@ -6556,16 +6554,24 @@ function Library:CreateWindow(WindowInfo)
         })
 
         if WindowInfo.BackgroundImage then
-            BackgroundImage = New("ImageLabel", {
-                Image = WindowInfo.BackgroundImage,
+            local bgImageId = WindowInfo.BackgroundImage
+            if type(bgImageId) == "number" then
+                bgImageId = "rbxassetid://" .. tostring(bgImageId)
+            end
+            local BackgroundImage = New("ImageLabel", {
+                Image = bgImageId,
                 Position = UDim2.fromScale(0, 0),
                 Size = UDim2.fromScale(1, 1),
                 ScaleType = Enum.ScaleType.Stretch,
-                ZIndex = 999,
+                ZIndex = 0,
                 BackgroundTransparency = 1,
-                ImageTransparency = 0.75,
+                ImageTransparency = 0,
                 Parent = MainFrame,
             })
+            MainFrame.BackgroundTransparency = 1
+            Library:RemoveFromRegistry(MainFrame)
+            WindowInfo._hasBackgroundImage = true
+        end
 
             table.insert(
                 Library.Corners,
@@ -6857,6 +6863,10 @@ function Library:CreateWindow(WindowInfo)
             Size = UDim2.new(1, -InitialLeftWidth - 1, 1, -70),
             Parent = MainFrame,
         })
+        if WindowInfo._hasBackgroundImage then
+            Container.BackgroundTransparency = 1
+            Library:RemoveFromRegistry(Container)
+        end
         New("UIPadding", {
             PaddingBottom = UDim.new(0, 0),
             PaddingLeft = UDim.new(0, 6),
