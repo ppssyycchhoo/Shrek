@@ -998,6 +998,7 @@ function Library:UpdateColorsUsingRegistry()
     for Instance, Properties in Library.Registry do
         for Property, Index in Properties do
             local SchemeValue = GetSchemeValue(Index)
+
             if SchemeValue or typeof(Index) == "function" then
                 Instance[Property] = SchemeValue or Index()
             end
@@ -3997,6 +3998,7 @@ do
         table.insert(Groupbox.Elements, Toggle)
 
         Toggle.Default = Toggle.Value
+
         Toggles[Idx] = Toggle
 
         return Toggle
