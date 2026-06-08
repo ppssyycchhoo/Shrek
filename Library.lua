@@ -6554,24 +6554,16 @@ function Library:CreateWindow(WindowInfo)
         })
 
         if WindowInfo.BackgroundImage then
-            local bgImageId = WindowInfo.BackgroundImage
-            if type(bgImageId) == "number" then
-                bgImageId = "rbxassetid://" .. tostring(bgImageId)
-            end
-            local BackgroundImage = New("ImageLabel", {
-                Image = bgImageId,
+            BackgroundImage = New("ImageLabel", {
+                Image = WindowInfo.BackgroundImage,
                 Position = UDim2.fromScale(0, 0),
                 Size = UDim2.fromScale(1, 1),
                 ScaleType = Enum.ScaleType.Stretch,
-                ZIndex = 0,
+                ZIndex = 999,
                 BackgroundTransparency = 1,
-                ImageTransparency = 0,
+                ImageTransparency = 0.75,
                 Parent = MainFrame,
             })
-            MainFrame.BackgroundTransparency = 1
-            Library:RemoveFromRegistry(MainFrame)
-            WindowInfo._hasBackgroundImage = true
-        end
 
             table.insert(
                 Library.Corners,
@@ -6863,10 +6855,6 @@ function Library:CreateWindow(WindowInfo)
             Size = UDim2.new(1, -InitialLeftWidth - 1, 1, -70),
             Parent = MainFrame,
         })
-        if WindowInfo._hasBackgroundImage then
-            Container.BackgroundTransparency = 1
-            Library:RemoveFromRegistry(Container)
-        end
         New("UIPadding", {
             PaddingBottom = UDim.new(0, 0),
             PaddingLeft = UDim.new(0, 6),
